@@ -1119,7 +1119,8 @@ proto.koinos.rpc.block_store.add_block_request.prototype.toObject = function(opt
  */
 proto.koinos.rpc.block_store.add_block_request.toObject = function(includeInstance, msg) {
   var f, obj = {
-    blockToAdd: (f = msg.getBlockToAdd()) && koinos_protocol_protocol_pb.block.toObject(includeInstance, f)
+    blockToAdd: (f = msg.getBlockToAdd()) && koinos_protocol_protocol_pb.block.toObject(includeInstance, f),
+    receiptToAdd: (f = msg.getReceiptToAdd()) && koinos_protocol_protocol_pb.block_receipt.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1161,6 +1162,11 @@ proto.koinos.rpc.block_store.add_block_request.deserializeBinaryFromReader = fun
       reader.readMessage(value,koinos_protocol_protocol_pb.block.deserializeBinaryFromReader);
       msg.setBlockToAdd(value);
       break;
+    case 2:
+      var value = new koinos_protocol_protocol_pb.block_receipt;
+      reader.readMessage(value,koinos_protocol_protocol_pb.block_receipt.deserializeBinaryFromReader);
+      msg.setReceiptToAdd(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1196,6 +1202,14 @@ proto.koinos.rpc.block_store.add_block_request.serializeBinaryToWriter = functio
       1,
       f,
       koinos_protocol_protocol_pb.block.serializeBinaryToWriter
+    );
+  }
+  f = message.getReceiptToAdd();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      koinos_protocol_protocol_pb.block_receipt.serializeBinaryToWriter
     );
   }
 };
@@ -1235,6 +1249,43 @@ proto.koinos.rpc.block_store.add_block_request.prototype.clearBlockToAdd = funct
  */
 proto.koinos.rpc.block_store.add_block_request.prototype.hasBlockToAdd = function() {
   return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional koinos.protocol.block_receipt receipt_to_add = 2;
+ * @return {?proto.koinos.protocol.block_receipt}
+ */
+proto.koinos.rpc.block_store.add_block_request.prototype.getReceiptToAdd = function() {
+  return /** @type{?proto.koinos.protocol.block_receipt} */ (
+    jspb.Message.getWrapperField(this, koinos_protocol_protocol_pb.block_receipt, 2));
+};
+
+
+/**
+ * @param {?proto.koinos.protocol.block_receipt|undefined} value
+ * @return {!proto.koinos.rpc.block_store.add_block_request} returns this
+*/
+proto.koinos.rpc.block_store.add_block_request.prototype.setReceiptToAdd = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.koinos.rpc.block_store.add_block_request} returns this
+ */
+proto.koinos.rpc.block_store.add_block_request.prototype.clearReceiptToAdd = function() {
+  return this.setReceiptToAdd(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.koinos.rpc.block_store.add_block_request.prototype.hasReceiptToAdd = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 

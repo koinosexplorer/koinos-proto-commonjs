@@ -26,12 +26,11 @@ goog.exportSymbol('proto.koinos.chain.system_space_id', null, global);
  * @enum {number}
  */
 proto.koinos.chain.system_space_id = {
-  RESERVED_ID: 0,
-  METADATA: 1,
-  SYSTEM_CALL_DISPATCH: 3,
-  CONTRACT_BYTECODE: 4,
-  CONTRACT_METADATA: 5,
-  TRANSACTION_NONCE: 6
+  METADATA: 0,
+  SYSTEM_CALL_DISPATCH: 1,
+  CONTRACT_BYTECODE: 2,
+  CONTRACT_METADATA: 3,
+  TRANSACTION_NONCE: 4
 };
 
 goog.object.extend(exports, proto.koinos.chain);

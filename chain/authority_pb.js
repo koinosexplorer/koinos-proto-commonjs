@@ -593,9 +593,9 @@ proto.koinos.chain.authorize_result.prototype.setValue = function(value) {
  * @enum {number}
  */
 proto.koinos.chain.authorization_type = {
-  CALL_CONTRACT: 0,
-  USE_RC: 1,
-  UPLOAD_CONTRACT: 2
+  CONTRACT_CALL: 0,
+  TRANSACTION_APPLICATION: 1,
+  CONTRACT_UPLOAD: 2
 };
 
 goog.object.extend(exports, proto.koinos.chain);

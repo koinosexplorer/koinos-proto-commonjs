@@ -28,13 +28,11 @@ goog.exportSymbol('proto.koinos.protocol.block_header', null, global);
 goog.exportSymbol('proto.koinos.protocol.block_receipt', null, global);
 goog.exportSymbol('proto.koinos.protocol.call_contract_operation', null, global);
 goog.exportSymbol('proto.koinos.protocol.contract_call_bundle', null, global);
-goog.exportSymbol('proto.koinos.protocol.dsa', null, global);
 goog.exportSymbol('proto.koinos.protocol.event_data', null, global);
 goog.exportSymbol('proto.koinos.protocol.operation', null, global);
 goog.exportSymbol('proto.koinos.protocol.operation.OpCase', null, global);
 goog.exportSymbol('proto.koinos.protocol.set_system_call_operation', null, global);
 goog.exportSymbol('proto.koinos.protocol.set_system_contract_operation', null, global);
-goog.exportSymbol('proto.koinos.protocol.system_authorization_type', null, global);
 goog.exportSymbol('proto.koinos.protocol.system_call_target', null, global);
 goog.exportSymbol('proto.koinos.protocol.system_call_target.TargetCase', null, global);
 goog.exportSymbol('proto.koinos.protocol.transaction', null, global);
@@ -1128,7 +1126,7 @@ proto.koinos.protocol.upload_contract_operation.toObject = function(includeInsta
     bytecode: msg.getBytecode_asB64(),
     abi: jspb.Message.getFieldWithDefault(msg, 3, ""),
     authorizesCallContract: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    authorizesUseRc: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+    authorizesTransactionApplication: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
     authorizesUploadContract: jspb.Message.getBooleanFieldWithDefault(msg, 6, false)
   };
 
@@ -1184,7 +1182,7 @@ proto.koinos.protocol.upload_contract_operation.deserializeBinaryFromReader = fu
       break;
     case 5:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setAuthorizesUseRc(value);
+      msg.setAuthorizesTransactionApplication(value);
       break;
     case 6:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -1247,7 +1245,7 @@ proto.koinos.protocol.upload_contract_operation.serializeBinaryToWriter = functi
       f
     );
   }
-  f = message.getAuthorizesUseRc();
+  f = message.getAuthorizesTransactionApplication();
   if (f) {
     writer.writeBool(
       5,
@@ -1385,10 +1383,10 @@ proto.koinos.protocol.upload_contract_operation.prototype.setAuthorizesCallContr
 
 
 /**
- * optional bool authorizes_use_rc = 5;
+ * optional bool authorizes_transaction_application = 5;
  * @return {boolean}
  */
-proto.koinos.protocol.upload_contract_operation.prototype.getAuthorizesUseRc = function() {
+proto.koinos.protocol.upload_contract_operation.prototype.getAuthorizesTransactionApplication = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
 };
 
@@ -1397,7 +1395,7 @@ proto.koinos.protocol.upload_contract_operation.prototype.getAuthorizesUseRc = f
  * @param {boolean} value
  * @return {!proto.koinos.protocol.upload_contract_operation} returns this
  */
-proto.koinos.protocol.upload_contract_operation.prototype.setAuthorizesUseRc = function(value) {
+proto.koinos.protocol.upload_contract_operation.prototype.setAuthorizesTransactionApplication = function(value) {
   return jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
@@ -2387,8 +2385,9 @@ proto.koinos.protocol.transaction_header.prototype.toObject = function(opt_inclu
  */
 proto.koinos.protocol.transaction_header.toObject = function(includeInstance, msg) {
   var f, obj = {
-    rcLimit: jspb.Message.getFieldWithDefault(msg, 1, "0"),
-    nonce: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    chainId: msg.getChainId_asB64(),
+    rcLimit: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    nonce: msg.getNonce_asB64(),
     operationMerkleRoot: msg.getOperationMerkleRoot_asB64(),
     payer: msg.getPayer_asB64(),
     payee: msg.getPayee_asB64()
@@ -2429,22 +2428,26 @@ proto.koinos.protocol.transaction_header.deserializeBinaryFromReader = function(
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readUint64String());
-      msg.setRcLimit(value);
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setChainId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readUint64String());
-      msg.setNonce(value);
+      msg.setRcLimit(value);
       break;
     case 3:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setOperationMerkleRoot(value);
+      msg.setNonce(value);
       break;
     case 4:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setPayer(value);
+      msg.setOperationMerkleRoot(value);
       break;
     case 5:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setPayer(value);
+      break;
+    case 6:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setPayee(value);
       break;
@@ -2477,38 +2480,45 @@ proto.koinos.protocol.transaction_header.prototype.serializeBinary = function() 
  */
 proto.koinos.protocol.transaction_header.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getRcLimit();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeUint64String(
+  f = message.getChainId_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
       1,
       f
     );
   }
-  f = message.getNonce();
+  f = message.getRcLimit();
   if (parseInt(f, 10) !== 0) {
     writer.writeUint64String(
       2,
       f
     );
   }
-  f = message.getOperationMerkleRoot_asU8();
+  f = message.getNonce_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       3,
       f
     );
   }
-  f = message.getPayer_asU8();
+  f = message.getOperationMerkleRoot_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       4,
       f
     );
   }
-  f = message.getPayee_asU8();
+  f = message.getPayer_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       5,
+      f
+    );
+  }
+  f = message.getPayee_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      6,
       f
     );
   }
@@ -2516,28 +2526,52 @@ proto.koinos.protocol.transaction_header.serializeBinaryToWriter = function(mess
 
 
 /**
- * optional uint64 rc_limit = 1;
+ * optional bytes chain_id = 1;
+ * @return {!(string|Uint8Array)}
+ */
+proto.koinos.protocol.transaction_header.prototype.getChainId = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * optional bytes chain_id = 1;
+ * This is a type-conversion wrapper around `getChainId()`
+ * @return {string}
+ */
+proto.koinos.protocol.transaction_header.prototype.getChainId_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getChainId()));
+};
+
+
+/**
+ * optional bytes chain_id = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getChainId()`
+ * @return {!Uint8Array}
+ */
+proto.koinos.protocol.transaction_header.prototype.getChainId_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getChainId()));
+};
+
+
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.koinos.protocol.transaction_header} returns this
+ */
+proto.koinos.protocol.transaction_header.prototype.setChainId = function(value) {
+  return jspb.Message.setProto3BytesField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 rc_limit = 2;
  * @return {string}
  */
 proto.koinos.protocol.transaction_header.prototype.getRcLimit = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.koinos.protocol.transaction_header} returns this
- */
-proto.koinos.protocol.transaction_header.prototype.setRcLimit = function(value) {
-  return jspb.Message.setProto3StringIntField(this, 1, value);
-};
-
-
-/**
- * optional uint64 nonce = 2;
- * @return {string}
- */
-proto.koinos.protocol.transaction_header.prototype.getNonce = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
@@ -2546,22 +2580,64 @@ proto.koinos.protocol.transaction_header.prototype.getNonce = function() {
  * @param {string} value
  * @return {!proto.koinos.protocol.transaction_header} returns this
  */
-proto.koinos.protocol.transaction_header.prototype.setNonce = function(value) {
+proto.koinos.protocol.transaction_header.prototype.setRcLimit = function(value) {
   return jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
 /**
- * optional bytes operation_merkle_root = 3;
+ * optional bytes nonce = 3;
  * @return {!(string|Uint8Array)}
  */
-proto.koinos.protocol.transaction_header.prototype.getOperationMerkleRoot = function() {
+proto.koinos.protocol.transaction_header.prototype.getNonce = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /**
- * optional bytes operation_merkle_root = 3;
+ * optional bytes nonce = 3;
+ * This is a type-conversion wrapper around `getNonce()`
+ * @return {string}
+ */
+proto.koinos.protocol.transaction_header.prototype.getNonce_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getNonce()));
+};
+
+
+/**
+ * optional bytes nonce = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getNonce()`
+ * @return {!Uint8Array}
+ */
+proto.koinos.protocol.transaction_header.prototype.getNonce_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getNonce()));
+};
+
+
+/**
+ * @param {!(string|Uint8Array)} value
+ * @return {!proto.koinos.protocol.transaction_header} returns this
+ */
+proto.koinos.protocol.transaction_header.prototype.setNonce = function(value) {
+  return jspb.Message.setProto3BytesField(this, 3, value);
+};
+
+
+/**
+ * optional bytes operation_merkle_root = 4;
+ * @return {!(string|Uint8Array)}
+ */
+proto.koinos.protocol.transaction_header.prototype.getOperationMerkleRoot = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * optional bytes operation_merkle_root = 4;
  * This is a type-conversion wrapper around `getOperationMerkleRoot()`
  * @return {string}
  */
@@ -2572,7 +2648,7 @@ proto.koinos.protocol.transaction_header.prototype.getOperationMerkleRoot_asB64 
 
 
 /**
- * optional bytes operation_merkle_root = 3;
+ * optional bytes operation_merkle_root = 4;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getOperationMerkleRoot()`
@@ -2589,21 +2665,21 @@ proto.koinos.protocol.transaction_header.prototype.getOperationMerkleRoot_asU8 =
  * @return {!proto.koinos.protocol.transaction_header} returns this
  */
 proto.koinos.protocol.transaction_header.prototype.setOperationMerkleRoot = function(value) {
-  return jspb.Message.setProto3BytesField(this, 3, value);
+  return jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
 /**
- * optional bytes payer = 4;
+ * optional bytes payer = 5;
  * @return {!(string|Uint8Array)}
  */
 proto.koinos.protocol.transaction_header.prototype.getPayer = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /**
- * optional bytes payer = 4;
+ * optional bytes payer = 5;
  * This is a type-conversion wrapper around `getPayer()`
  * @return {string}
  */
@@ -2614,7 +2690,7 @@ proto.koinos.protocol.transaction_header.prototype.getPayer_asB64 = function() {
 
 
 /**
- * optional bytes payer = 4;
+ * optional bytes payer = 5;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getPayer()`
@@ -2631,21 +2707,21 @@ proto.koinos.protocol.transaction_header.prototype.getPayer_asU8 = function() {
  * @return {!proto.koinos.protocol.transaction_header} returns this
  */
 proto.koinos.protocol.transaction_header.prototype.setPayer = function(value) {
-  return jspb.Message.setProto3BytesField(this, 4, value);
+  return jspb.Message.setProto3BytesField(this, 5, value);
 };
 
 
 /**
- * optional bytes payee = 5;
+ * optional bytes payee = 6;
  * @return {!(string|Uint8Array)}
  */
 proto.koinos.protocol.transaction_header.prototype.getPayee = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /**
- * optional bytes payee = 5;
+ * optional bytes payee = 6;
  * This is a type-conversion wrapper around `getPayee()`
  * @return {string}
  */
@@ -2656,7 +2732,7 @@ proto.koinos.protocol.transaction_header.prototype.getPayee_asB64 = function() {
 
 
 /**
- * optional bytes payee = 5;
+ * optional bytes payee = 6;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getPayee()`
@@ -2673,7 +2749,7 @@ proto.koinos.protocol.transaction_header.prototype.getPayee_asU8 = function() {
  * @return {!proto.koinos.protocol.transaction_header} returns this
  */
 proto.koinos.protocol.transaction_header.prototype.setPayee = function(value) {
-  return jspb.Message.setProto3BytesField(this, 5, value);
+  return jspb.Message.setProto3BytesField(this, 6, value);
 };
 
 
@@ -4726,20 +4802,5 @@ proto.koinos.protocol.block_receipt.prototype.clearLogsList = function() {
   return this.setLogsList([]);
 };
 
-
-/**
- * @enum {number}
- */
-proto.koinos.protocol.dsa = {
-  ECDSA_SECP256K1: 0
-};
-
-/**
- * @enum {number}
- */
-proto.koinos.protocol.system_authorization_type = {
-  SET_SYSTEM_CONTRACT: 0,
-  SET_SYSTEM_CALL: 1
-};
 
 goog.object.extend(exports, proto.koinos.protocol);

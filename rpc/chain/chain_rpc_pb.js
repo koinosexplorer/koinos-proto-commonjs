@@ -295,7 +295,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.koinos.rpc.chain.read_contract_response = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.koinos.rpc.chain.read_contract_response.repeatedFields_, null);
 };
 goog.inherits(proto.koinos.rpc.chain.read_contract_response, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -2219,6 +2219,13 @@ proto.koinos.rpc.chain.read_contract_request.prototype.setArgs = function(value)
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.koinos.rpc.chain.read_contract_response.repeatedFields_ = [2];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -2251,7 +2258,7 @@ proto.koinos.rpc.chain.read_contract_response.prototype.toObject = function(opt_
 proto.koinos.rpc.chain.read_contract_response.toObject = function(includeInstance, msg) {
   var f, obj = {
     result: msg.getResult_asB64(),
-    logs: jspb.Message.getFieldWithDefault(msg, 2, "")
+    logsList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -2294,7 +2301,7 @@ proto.koinos.rpc.chain.read_contract_response.deserializeBinaryFromReader = func
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setLogs(value);
+      msg.addLogs(value);
       break;
     default:
       reader.skipField();
@@ -2332,9 +2339,9 @@ proto.koinos.rpc.chain.read_contract_response.serializeBinaryToWriter = function
       f
     );
   }
-  f = message.getLogs();
+  f = message.getLogsList();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeRepeatedString(
       2,
       f
     );
@@ -2385,20 +2392,39 @@ proto.koinos.rpc.chain.read_contract_response.prototype.setResult = function(val
 
 
 /**
- * optional string logs = 2;
- * @return {string}
+ * repeated string logs = 2;
+ * @return {!Array<string>}
  */
-proto.koinos.rpc.chain.read_contract_response.prototype.getLogs = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+proto.koinos.rpc.chain.read_contract_response.prototype.getLogsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
+};
+
+
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.koinos.rpc.chain.read_contract_response} returns this
+ */
+proto.koinos.rpc.chain.read_contract_response.prototype.setLogsList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
 };
 
 
 /**
  * @param {string} value
+ * @param {number=} opt_index
  * @return {!proto.koinos.rpc.chain.read_contract_response} returns this
  */
-proto.koinos.rpc.chain.read_contract_response.prototype.setLogs = function(value) {
-  return jspb.Message.setProto3StringField(this, 2, value);
+proto.koinos.rpc.chain.read_contract_response.prototype.addLogs = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.koinos.rpc.chain.read_contract_response} returns this
+ */
+proto.koinos.rpc.chain.read_contract_response.prototype.clearLogsList = function() {
+  return this.setLogsList([]);
 };
 
 
@@ -2588,7 +2614,7 @@ proto.koinos.rpc.chain.get_account_nonce_response.prototype.toObject = function(
  */
 proto.koinos.rpc.chain.get_account_nonce_response.toObject = function(includeInstance, msg) {
   var f, obj = {
-    nonce: jspb.Message.getFieldWithDefault(msg, 1, "0")
+    nonce: msg.getNonce_asB64()
   };
 
   if (includeInstance) {
@@ -2626,7 +2652,7 @@ proto.koinos.rpc.chain.get_account_nonce_response.deserializeBinaryFromReader = 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readUint64String());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setNonce(value);
       break;
     default:
@@ -2658,9 +2684,9 @@ proto.koinos.rpc.chain.get_account_nonce_response.prototype.serializeBinary = fu
  */
 proto.koinos.rpc.chain.get_account_nonce_response.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getNonce();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeUint64String(
+  f = message.getNonce_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
       1,
       f
     );
@@ -2669,20 +2695,44 @@ proto.koinos.rpc.chain.get_account_nonce_response.serializeBinaryToWriter = func
 
 
 /**
- * optional uint64 nonce = 1;
- * @return {string}
+ * optional bytes nonce = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.koinos.rpc.chain.get_account_nonce_response.prototype.getNonce = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /**
- * @param {string} value
+ * optional bytes nonce = 1;
+ * This is a type-conversion wrapper around `getNonce()`
+ * @return {string}
+ */
+proto.koinos.rpc.chain.get_account_nonce_response.prototype.getNonce_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getNonce()));
+};
+
+
+/**
+ * optional bytes nonce = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getNonce()`
+ * @return {!Uint8Array}
+ */
+proto.koinos.rpc.chain.get_account_nonce_response.prototype.getNonce_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getNonce()));
+};
+
+
+/**
+ * @param {!(string|Uint8Array)} value
  * @return {!proto.koinos.rpc.chain.get_account_nonce_response} returns this
  */
 proto.koinos.rpc.chain.get_account_nonce_response.prototype.setNonce = function(value) {
-  return jspb.Message.setProto3StringIntField(this, 1, value);
+  return jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 

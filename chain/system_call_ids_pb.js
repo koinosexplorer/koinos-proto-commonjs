@@ -1,4 +1,4 @@
-// source: koinos/protocol/system_call_ids.proto
+// source: koinos/chain/system_call_ids.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -21,11 +21,11 @@ var global = (function() {
   return Function('return this')();
 }.call(null));
 
-goog.exportSymbol('proto.koinos.protocol.system_call_id', null, global);
+goog.exportSymbol('proto.koinos.chain.system_call_id', null, global);
 /**
  * @enum {number}
  */
-proto.koinos.protocol.system_call_id = {
+proto.koinos.chain.system_call_id = {
   RESERVED_ID: 0,
   GET_HEAD_INFO: 1,
   APPLY_BLOCK: 2,
@@ -34,12 +34,20 @@ proto.koinos.protocol.system_call_id = {
   APPLY_CALL_CONTRACT_OPERATION: 5,
   APPLY_SET_SYSTEM_CALL_OPERATION: 6,
   APPLY_SET_SYSTEM_CONTRACT_OPERATION: 7,
+  PRE_BLOCK_CALLBACK: 8,
+  POST_BLOCK_CALLBACK: 9,
+  PRE_TRANSACTION_CALLBACK: 10,
+  POST_TRANSACTION_CALLBACK: 11,
   PROCESS_BLOCK_SIGNATURE: 101,
-  GET_TRANSACTION_FIELD: 102,
-  GET_BLOCK_FIELD: 103,
-  GET_LAST_IRREVERSIBLE_BLOCK: 104,
-  GET_ACCOUNT_NONCE: 105,
-  AUTHORIZE_SYSTEM: 106,
+  GET_TRANSACTION: 102,
+  GET_TRANSACTION_FIELD: 103,
+  GET_BLOCK: 104,
+  GET_BLOCK_FIELD: 105,
+  GET_LAST_IRREVERSIBLE_BLOCK: 106,
+  GET_ACCOUNT_NONCE: 107,
+  VERIFY_ACCOUNT_NONCE: 108,
+  SET_ACCOUNT_NONCE: 109,
+  REQUIRE_SYSTEM_AUTHORITY: 110,
   GET_ACCOUNT_RC: 201,
   CONSUME_ACCOUNT_RC: 202,
   GET_RESOURCE_LIMITS: 203,
@@ -57,13 +65,12 @@ proto.koinos.protocol.system_call_id = {
   VERIFY_SIGNATURE: 504,
   CALL_CONTRACT: 601,
   GET_ENTRY_POINT: 602,
-  GET_CONTRACT_ARGUMENTS_SIZE: 603,
-  GET_CONTRACT_ARGUMENTS: 604,
-  SET_CONTRACT_RESULT: 605,
-  EXIT_CONTRACT: 606,
-  GET_CONTRACT_ID: 607,
-  GET_CALLER: 608,
-  REQUIRE_AUTHORITY: 609
+  GET_CONTRACT_ARGUMENTS: 603,
+  SET_CONTRACT_RESULT: 604,
+  EXIT_CONTRACT: 605,
+  GET_CONTRACT_ID: 606,
+  GET_CALLER: 607,
+  REQUIRE_AUTHORITY: 608
 };
 
-goog.object.extend(exports, proto.koinos.protocol);
+goog.object.extend(exports, proto.koinos.chain);
